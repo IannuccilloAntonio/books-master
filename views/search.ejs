@@ -1,0 +1,56 @@
+<% include header.ejs %>
+
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-6">
+      <h4>Cerca un libro</h4>
+
+        <div class="form-group">
+          <label for="title">Cerca Titolo</label>
+          <input type="text" name="title" id="title" class="form-control">
+        </div>
+
+        <button class="btn btn-primary btn-block search-btn">Cerca</button>
+
+        <div class="row" id="books">
+
+        </div>
+    </div>
+  </div>
+</div>
+
+<% include footer.ejs %>
+
+<script>
+var titleInput = $('#title');
+var searchBtn = $('.search-btn');
+var booksContainer = $('#books');
+
+searchBtn.on('click', function (e) {
+  var title =  titleInput.val();
+
+  booksContainer.text('');
+
+  $.get('/search-title/' + title)
+  .done( function (data) {
+    console.log(data);
+
+    data.forEach( function (book) {
+
+      var card = $('<div>', { class: "card" });
+      var cardBody = $('<div>', { class: 'card-body' });
+
+      var h5 = $('<h5>', { class: 'card-title' });
+      var a = $('<a>', { class: 'btn-link' });
+      a.text(book.title);
+      h5.append(a);
+
+      cardBody.append(h5);
+	    card.append(cardBody);
+      booksContainer.append(card);
+    });
+
+  });
+});
+
+</script>

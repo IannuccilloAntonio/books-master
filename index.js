@@ -24,7 +24,7 @@ const Comment = mongoose.model('Comment', commentSchema);
 const app = express();
 
 mongoose.connect(
-  'mongodb://127.0.0.1:27017/books',
+  'mongodb://127.0.0.1:32768/books',
   function (err) {
     if (err) {
       console.log(err);
@@ -139,6 +139,23 @@ console.log(comment);
 console.log(err);
     	res.redirect('/');
 	});
+});
+
+
+app.get('/search', function (req, res) {
+  res.render('search');
+});
+
+app.get('/search-title/:title', function (req, res) {
+  const title =  req.params.title;
+  Book.find({
+    title: {
+      $regex: title,
+      $options: 'i'
+    }
+  }).exec( function (err, result) {
+    res.json(result);
+  });
 });
 
 app.use( function (req, res) {
