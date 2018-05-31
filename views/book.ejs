@@ -1,0 +1,33 @@
+<% include header.ejs %>
+
+<div class="container">
+  <div class="row justify-content-center mt-5">
+    <div class="col-6">
+      <h4>Modifica Libro</h4>
+      <form action="/book-update" method="POST">
+        <input type="hidden" name="id" value="<%= book._id %>">
+        <div class="form-group">
+          <label for="title">Titolo</label>
+          <input type="text" name="title" id="title" class="form-control" value="<%= book.title %>">
+        </div>
+
+        <button type="submit" class="btn btn-warning btn-block">Aggiorna</button>
+      </form>
+    </div>
+  </div>
+	<div class="row justify-content-center mt-5">
+		<div class="col-6">
+		<% comments.forEach( function (comment) { %>
+		<form action="/delete-comment" method="POST">
+			<input type="hidden" name="commentId" id="commentId" value="<%= comment._id %>">
+			<h5 class="card-comment"><%= comment.comment %>
+		
+			<input type="hidden" name="bookId" id="Id" value="<%= book._id %>">
+			<button type="submit" class="btn btn-danger">&times</button></h5>	
+		</form>
+<%}); %>
+		</div>
+	</div>
+	
+</div>
+<% include footer.ejs %>
