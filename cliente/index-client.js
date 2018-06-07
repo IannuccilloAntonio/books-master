@@ -4,9 +4,8 @@ const log = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const bookSchema = mongoose.Schema({ 
-  inventario: { type:String, required: true},
-  titolo: { type: String, required: true },
+const bookSchema = mongoose.Schema({
+  title: { type: String, required: true },
   prestito: {
     nome: String,
     cognome: String,
@@ -32,7 +31,7 @@ mongoose.connect(
       return;
     }
 
-    app.listen(3009);
+    app.listen(3006);
   }
 );
 
@@ -48,64 +47,21 @@ app.use( bodyParser.urlencoded( { extended : false } ) );
 
 app.get( '/', function (req, res) {
   Book.find().exec( function (err, result) {
-	console.log(result);
-    res.render('index', {
+    res.render('index-cliente', {
       books: result
     });
   });
 });
 
 
-
-app.get( '/new-book', function (req, res) {
-  res.render('new_book');
-});
-
-
-app.post( '/new-book', function (req, res) {
-  console.log(req.body);
-  //if (!req.body.title) {
-  //}
-  const book = new Book({
-    title: req.body.title,
-  });
-  book.save().then( function () {
-    res.redirect('/new-book');
-  });
-});
-
-app.post( '/delete-book', function (req, res) {
-  Book.remove( { _id: req.body.id }, function (err) {
-    res.redirect('/');
-  });
-});
-app.post( '/delete-comment', function (req, res) {
-  Comment.remove( { _id: req.body.commentId }, function (err) {
-    res.redirect('/books/'+ req.body.bookId);//pagina di quale librooo???
-  });
-});
-
 app.get( '/books/:id', function (req, res) {
   Book.find( { _id: req.params.id } ).exec( function (err, books) {
 	  Comment.find( { bookId: req.params.id } ).exec( function (err, comments) {
-	    res.render('book', {
+	    res.render('book-cliente', {
                book: books[0],
                comments: comments, //lo stesso ma con comment
 	    });
   	  });
-  });
-});
-
-app.post( '/book-update', function (req, res) {
-  //if (!req.body.title) {
-  //}
-  
-  Book.update({
-    _id: req.body.id
-  }, {
-    title: req.body.title,
-  }, function (err) {
-    res.redirect('/');
   });
 });
 
@@ -121,15 +77,7 @@ app.post('/prenota', function (req, res) {
   });
 });
 
-app.post( '/delete-prenotazione', function (req, res) {
-	Book.update({
-	 _id: req.body.id,
-	}, {
-       prestito: {}
-  }, function (err) {
-	res.redirect('/');
-  });
-});
+
 app.post('/comment', function (req, res) {
   console.log(req.body);	
 	const comment = new Comment({
@@ -145,13 +93,13 @@ console.log(err);
 
 
 app.get('/search', function (req, res) {
-  res.render('search');
+  res.render('search-cliente');
 });
 
 app.get('/search-title/:title', function (req, res) {
   const title =  req.params.title;
   Book.find({
-    titolo: {
+    title: {
       $regex: title,
       $options: 'i'
     }

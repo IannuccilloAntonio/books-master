@@ -42,7 +42,7 @@ searchBtn.on('click', function (e) {
 
       var h5 = $('<h5>', { class: 'card-title' });
       var a = $('<a>', { class: 'btn-link', href:'/books/'+book._id });
-      a.text(book.titolo);
+      a.text(book.title);
       h5.append(a);
 
       cardBody.append(h5);

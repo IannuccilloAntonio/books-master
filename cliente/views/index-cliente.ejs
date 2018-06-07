@@ -27,14 +27,13 @@
 </div>
 </div>
 
-  <% books.forEach( function (book) { %>
+  <% books.forEach( function (book, comment) { %>
     <div class="card book">
       <div class="card-body">
 	<form action="/delete-book" method="POST">
-          <h5 class="card-title"><a class="btn-link" href="/books/<%= book._id %>"><%= book.inventario +' ' %><%= book.titolo %></a>
+          <h5 class="card-title"><a class="btn-link" href="/books/<%= book._id %>"><%= book.title %></a>
         
           <input type="hidden" name="id" class="id" value="<%= book._id %>">
-          <button type="submit" class="btn btn-danger" widht="100px">&times</button></h5>
         </form>
 
         <button class="btn btn-success prenota-btn">Prenota</button>
@@ -42,10 +41,6 @@
 	
         <% if (book.prestito && (book.prestito.nome || book.prestito.cognome)) { %>
           <h5>Preso in prestito da <%= book.prestito.nome %> <%= book.prestito.cognome %>
-	<form action="/delete-prenotazione" method="POST">
-          <input type="hidden" name="id" class="id" value="<%= book._id %>">
-          <button type="submit" class="btn btn-danger">Restituito</button></h5>
-	</form>
 		  
 	<button class="btn btn-success comment-btn">Lascia un feedback</button>
 			
